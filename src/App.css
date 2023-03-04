@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.main-container{
+  display: flex;
+  justify-content: center;
+}
+
+.h1-header{
+  color: red;
+}
