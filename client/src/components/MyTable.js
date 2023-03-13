@@ -3,14 +3,22 @@ import {Button, TextField} from "@mui/material";
 import MyRow from "./MyRow";
 
 
+const USERS = [
+    {firstName: "John", graduate: 20},
+    {firstName: "Robb", graduate: 50},
+    {firstName: "Aria", graduate: 80},
+    {firstName: "Sansa", graduate: 120},
+]
+
 function MyTable() {
     const [counter, setCounter] = useState(0)
     const [users, setUsers] = useState([])
     const [filteredUsers, setFilteredUsers] = useState([])
     const [searchString, setSearchString] = useState('')
+    const [info, setInfo] = useState(null)
 
     useEffect(() => {
-        const url = 'https://dummyjson.com/users?limit=100'
+        const url = 'http://localhost:8080/api/users'
         console.log(url)
         fetch(url)
             .then(response => response.json())
@@ -29,7 +37,7 @@ function MyTable() {
     }, []);
 
     const handleClickBtnCounter = function () {
-         const filtered = users.filter((user => {
+        const filtered = users.filter((user => {
             return user.firstName.startsWith(searchString)
         }))
         setCounter(filtered.length)
@@ -41,11 +49,11 @@ function MyTable() {
 
     return (
         <div>
-            <div> {counter} </div>
+            {info && <div>{info}</div>}
             <div>
-               <TextField variant='outlined'
-                          onChange={handleTextInput}
-                          value={searchString} />
+                <TextField variant='outlined'
+                           onChange={handleTextInput}
+                           value={searchString}/>
             </div>
             <div>
                 <Button variant="contained"
@@ -58,12 +66,13 @@ function MyTable() {
                     <th>Phone</th>
                 </tr>
                 <tbody>
-                { filteredUsers.map(user => {
-                    return(
-                         <MyRow name={user.firstName}
-                                key={user.id}
-                                email={user.email}
-                                phone ={user.phone} />
+                {users.map(user => {
+                    return (
+                        <MyRow name={user.firstName}
+                               setInfo={setInfo}
+                               id={user.id}
+                               email={user.email}
+                               phone={user.phone}/>
                     )
                 })
                 }
