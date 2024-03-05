@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/users', (req, res) => {
     const users = db.data.users
-    res.json({users})
+    res.json({users, total: users.length})
 })
 
 app.get('/api/users/:id', async (req, res) => {
@@ -38,7 +38,6 @@ app.get('/api/users/:id', async (req, res) => {
         res.status(400).json({msg: 'id is required'})
     }
     const user = db.data.users.filter(user => user.id == id)[0]
-
     res.json({id, user})
 })
 
@@ -47,7 +46,7 @@ app.post('/api/users', async (req, res) => {
     const user = {...req.body, id}
     db.data.users.push(user)
     await db.write()
-    res.json({id})
+    res.json({user})
 })
 
 app.delete('/api/users/:id', async (req, res) => {
@@ -55,7 +54,7 @@ app.delete('/api/users/:id', async (req, res) => {
     if (!id) {
         res.status(400).json({msg: 'id is required'})
     }
-    db.data.users = db.data.users.filter(user => user.id !== id)
+    db.data.users = db.data.users.filter(user => user.id != id)
     await db.write()
     res.json({msg: 'OK, deleted ' + id})
 })

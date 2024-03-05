@@ -1,10 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 
 
-function MyRow( {id, name, email, phone, setInfo} ) {
-    const handleClick = () =>{
-        const url = 'http://localhost:8080/api/users/' + id
-        const info = fetch(url).then(response => response.json()).then(data => {
+function MyRow({id, name, email, phone, setInfo}) {
+    const URL = 'http://localhost:8080/api/users/'
+    const [isDeleted, setIsDeleted] = useState(false)
+    const handleClick = () => {
+        const url = URL + id
+        fetch(url).then(response => response.json()).then(data => {
                 console.log(data.user)
                 return data.user
             }
@@ -12,12 +14,30 @@ function MyRow( {id, name, email, phone, setInfo} ) {
 
     }
 
+    const removeUser = () => {
+        if (window.confirm(`remove user ${name} ?`)) {
+            const url = URL + id
+            fetch(url, {
+                method: 'DELETE'
+            }).then(response => response.json()).then(data => {
+                console.log(data)
+                setIsDeleted(true)
+            })
+        }
+    }
+
     return (
-        <tr key={id} id={`key-${id}`}>
-            <td onClick={handleClick}>{name}</td>
+        (!isDeleted && <tr key={id} id={`key-${id}`}>
+            <td>{name}</td>
             <td>{email}</td>
             <td>{phone}</td>
-        </tr>
+            <td>
+                <button onClick={handleClick}>...</button>
+            </td>
+            <td>
+                <button onClick={removeUser}>-</button>
+            </td>
+        </tr>)
     )
 }
 
