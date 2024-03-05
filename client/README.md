@@ -16,7 +16,9 @@ You may also see any lint errors in the console.
 
 ---
 You should get such ugly result on the start
-![img.png](img/img.png)
+![img.png](img/img_2.png)
+
+Notice - now we have buttons for Add new user, delete existing and view details of the user.
 
 Feel free to make any changes to optimize appearance and make it more usable and pretty.
 
