@@ -3,23 +3,12 @@ import {Button, TextField} from "@mui/material";
 import MyRow from "./MyRow";
 
 
-const USERS = [
-    {firstName: "John", graduate: 20},
-    {firstName: "Robb", graduate: 50},
-    {firstName: "Aria", graduate: 80},
-    {firstName: "Sansa", graduate: 120},
-]
-
 function MyTable() {
-    const [counter, setCounter] = useState(0)
     const [users, setUsers] = useState([])
-    const [filteredUsers, setFilteredUsers] = useState([])
-    const [searchString, setSearchString] = useState('')
     const [nameInput, setNameInput] = useState('')
     const [emailInput, setEmailInput] = useState('')
     const [phoneInput, setPhoneInput] = useState('')
     const [addAllowed, setAddAllowed] = useState(false)
-    const [info, setInfo] = useState(null)
     const URL = 'http://localhost:8080/api/users'
     useEffect(() => {
         fetch(URL)
@@ -33,8 +22,6 @@ function MyTable() {
                     picture: user.image
                 }));
                 setUsers(formattedData);
-                setFilteredUsers(formattedData);
-                setCounter(filteredUsers.length)
             })
     }, []);
 
@@ -42,13 +29,6 @@ function MyTable() {
         checkAddAllowed()
     }, [nameInput, emailInput, phoneInput]);
 
-    const handleClickBtnCounter = function () {
-        const filtered = users.filter((user => {
-            return user.firstName.startsWith(searchString)
-        }))
-        setCounter(filtered.length)
-        setFilteredUsers(filtered)
-    }
     const handleNameInput = (event) => {
         setNameInput(event.target.value)
     }
@@ -65,15 +45,13 @@ function MyTable() {
             setAddAllowed(false)
         }
     }
-    // your code here
-
 
     const handleClickAddBtn = () => {
         const [firstName, lastName] = nameInput.split(' ')
         const email = emailInput
         const phone = phoneInput
         const body = {firstName, lastName, phone, email}
-        const response = fetch('http://localhost:8080/api/users',
+        const response = fetch(URL,
             {method: 'POST', body: JSON.stringify(body), headers: {'Content-Type': 'application/json'}})
             .then(response => response.json()).then(data => {
                 const newUser = data.user
@@ -109,7 +87,6 @@ function MyTable() {
                 {users.map(user => {
                     return (
                         <MyRow name={user.firstName}
-                               setInfo={setInfo}
                                id={user.id}
                                email={user.email}
                                phone={user.phone}/>

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 
 
-function MyRow({id, name, email, phone, setInfo}) {
+function MyRow({id, name, email, phone}) {
     const URL = 'http://localhost:8080/api/users/'
     const [isDeleted, setIsDeleted] = useState(false)
     const handleClick = () => {
