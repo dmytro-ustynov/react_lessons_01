@@ -7,6 +7,7 @@ function MyTable() {
     const [users, setUsers] = useState([])
     const [nameInput, setNameInput] = useState('')
     const [emailInput, setEmailInput] = useState('')
+    const [emailError, setEmailError] = useState('')
     const [phoneInput, setPhoneInput] = useState('')
     const [addAllowed, setAddAllowed] = useState(false)
     const URL = 'http://localhost:8080/api/users'
@@ -34,12 +35,17 @@ function MyTable() {
     }
     const handleEmailInput = (event) => {
         setEmailInput(event.target.value)
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(event.target.value)) {
+            setEmailError('Invalid email')
+        } else {
+            setEmailError('')
+        }
     }
     const handlePhoneInput = (event) => {
         setPhoneInput(event.target.value)
     }
     const checkAddAllowed = () => {
-        if (nameInput.length > 0 && emailInput.length > 0 && phoneInput.length > 0) {
+        if (nameInput.length > 0 && emailInput.length > 0 && phoneInput.length > 0 && !emailError) {
             setAddAllowed(true)
         } else {
             setAddAllowed(false)
@@ -69,6 +75,8 @@ function MyTable() {
             <TextField label="Name"
                        onChange={handleNameInput} value={nameInput}/>
             <TextField label="E-mail"
+                       error={!!emailError}
+                       helperText={emailError}
                        onChange={handleEmailInput} value={emailInput}/>
             <TextField label="Phone"
                        onChange={handlePhoneInput} value={phoneInput}/>
